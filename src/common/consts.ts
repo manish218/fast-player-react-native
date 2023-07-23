@@ -1,0 +1,1 @@
+export const IPTV_ORG_API_BASE_URL = "https://iptv-org.github.io/api/"

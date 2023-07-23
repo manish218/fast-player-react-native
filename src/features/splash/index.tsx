@@ -1,110 +1,32 @@
-import type { PropsWithChildren } from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { Image, Pressable, SafeAreaView, StyleSheet, Text, View, useColorScheme } from "react-native";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import CommonStyles from "../../common/styles/common";
+import { useEffect } from "react";
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+export function SplashViewNew({ navigation }) {
 
-function Section({ children, title }: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  useEffect(() => {
+    setTimeout(() => navigation.replace('Countries Listing'), 2000)
+  }, [])
 
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
 
-export function SplashView() {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+    backgroundColor: isDarkMode ? Colors.darker : Colors.darker,
+    flex: 1,
+  }
 
   return (<SafeAreaView style={backgroundStyle}>
-    <StatusBar
-      barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-      backgroundColor={backgroundStyle.backgroundColor}
-    />
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      style={backgroundStyle}>
-      <Header />
-      <View
-        style={{
-          backgroundColor: isDarkMode ? Colors.black : Colors.white,
-        }}>
-        <Section title="Step One">
-          Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-          screen and then come back to see your edits.
-        </Section>
-        <Section title="See Your Changes">
-          <ReloadInstructions />
-        </Section>
-        <Section title="Debug">
-          <DebugInstructions />
-        </Section>
-        <Section title="Learn More">
-          Read the docs to discover what to do next:
-        </Section>
-        <LearnMoreLinks />
+    <View style={{ ...CommonStyles.containerView, flexDirection: 'column' }}>
+      <Image source={require('./img/iptvorg.png')} style={CommonStyles.splashImage} />
+      <View style={{
+        backgroundColor: 'salmon', marginTop: 30, borderRadius: 10,
+        borderWidth: 1,
+      }}>
+        <Text style={{ ...CommonStyles.listItemText, fontSize: 30 }}>{'  Player  '}</Text>
       </View>
-    </ScrollView>
-  </SafeAreaView>)
+    </View>
+  </SafeAreaView >)
 }
 
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-
-export default Section
