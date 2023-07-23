@@ -22,9 +22,9 @@ function App(): JSX.Element {
         screenOptions={{
           headerShown: false
         }}>
-        {/* <Stack.Screen name="Splash">
+        <Stack.Screen name="Splash">
           {(props) => <SplashViewNew{...props} />}
-        </Stack.Screen> */}
+        </Stack.Screen>
         <Stack.Screen name="Countries Listing">
           {(props) => <CountriesListingView{...props} />}
         </Stack.Screen>

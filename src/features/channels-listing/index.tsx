@@ -52,7 +52,7 @@ export function ChannelsListingView({ route, navigation }) {
 
     return (<SafeAreaView style={backgroundStyle}>
         {isLoading ?
-            (<ActivityIndicator size={'large'} />)
+            (<View style={CommonStyles.containerView}><ActivityIndicator size={'large'} /> </View>)
             :
             (<FlatList
                 data={channels}
