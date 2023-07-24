@@ -13,6 +13,8 @@ export function CountriesListingView({ navigation }) {
     DiskCache.fetchCountriesList().then(
       (countries) => {
         setLoading(false)
+        console.log(`countries = ${countries.length}`)
+        countries.forEach(country => console.log(country))
         setCountries(countries)
       }
     )
@@ -20,7 +22,7 @@ export function CountriesListingView({ navigation }) {
 
   function listItemClickHandler(country: Country) {
     console.log(`Country selected = ${country.name} : ${country.code}`)
-    navigation.push('Channels Listing', { country })
+    navigation.push('Channels Listing', { country} )
   }
 
   type CountryItemProps = {

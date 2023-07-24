@@ -10,7 +10,6 @@ export async function fetchAndStoreValidSteamsChannelsAndCountries() {
 
         const MS_IN_A_DAY = 24 * 60 * 60 * 1000
         const lastApiSyncTime = await DiskCache.getLastApiSyncTime()
-
         if (lastApiSyncTime && Date.now() - lastApiSyncTime < MS_IN_A_DAY) {
             console.log('Use cached API reponses')
             //hold for 500 ms and then return
@@ -20,7 +19,7 @@ export async function fetchAndStoreValidSteamsChannelsAndCountries() {
                 }, 1000);
             });
         } else {
-            const [allStreams, allChannels, allCountries] = await Promise.all([fetchAllStreams(), fetchAllChannels(), fetchCountiesList()])
+            let [allStreams, allChannels, allCountries] = await Promise.all([fetchAllStreams(), fetchAllChannels(), fetchCountiesList()])
 
             //1. Get validstreams
             const validStreams = allStreams.filter((stream) => stream.url && stream && stream.url.startsWith('https'))
@@ -58,7 +57,6 @@ export async function fetchAndStoreValidSteamsChannelsAndCountries() {
 
             //6. Save all the data in parallem
             await Promise.all([DiskCache.cacheStreamsList(validStreams), DiskCache.cacheChannelsList(validChannels), DiskCache.cacheCountrisList(validCountries)])
-
             await DiskCache.saveLastApiSyncTime(Date.now())
         }
 

@@ -18,7 +18,7 @@ export class DiskCache {
 
     //streams related
     static cacheStreamsList = async (streams: Stream[]) => { return storeItems(STREAMS_LIST_STORE_KEY, streams) }
-    static fetchStreamsList = async  () => { return readItems<Stream>(STREAMS_LIST_STORE_KEY) }
+    static fetchStreamsList = async () => { return readItems<Stream>(STREAMS_LIST_STORE_KEY) }
 
     //streams related
     static saveLastApiSyncTime = async (timeMs: number) => { storeValue(LAST_API_SYNC_TIME, timeMs) }
@@ -29,24 +29,53 @@ export class DiskCache {
 //save list of objects
 async function storeItems<T>(key: string, items: T[]) {
     try {
-        const jsonValue = JSON.stringify(items);
-        await AsyncStorage.setItem(key, jsonValue);
+        console.log(`storeItems ${items.length}`)
+        await AsyncStorage.setItem(key + '_ITEM_COUNT', `${items.length}`);
+        await Promise.all(storeItemToAsyncStore(key, items)).then()
     } catch (e) {
         console.log(e)
     }
-};
+}
+
+function storeItemToAsyncStore<T>(baseKey: string, items: T[]): Promise<void>[] {
+    return items.map((item, index) => {
+        const jsonValue = JSON.stringify(item);
+        // console.log(`storeItemToAsyncStore: ${jsonValue}`)
+        return AsyncStorage.setItem(baseKey + `_${index}`, jsonValue)
+    })
+}
 
 //fetch list of objects
 async function readItems<T>(key: string) {
     try {
-        const jsonValue = await AsyncStorage.getItem(key);
-        const items: T[] = jsonValue != null ? JSON.parse(jsonValue) : [];
+        const itemsCountStr = await AsyncStorage.getItem(key + '_ITEM_COUNT');
+        const itemCount = Number(itemsCountStr)
+        console.log(`readItems: ${itemCount}`)
+        const items: T[] = []
+        await Promise.all(fetchItemFromAsyncStore(key, itemCount)).then(it => {
+            it.forEach(jsonValue => {
+                console.log(`readItems Json: ${jsonValue}`)
+                if (jsonValue) {
+                    const item = JSON.parse(jsonValue)
+                    // console.log(`readItems Item: ${item}`)
+                    items.push(item)
+                }
+            })
+        })
         return items
     } catch (e) {
         console.log(e)
         return []
     }
 };
+
+function fetchItemFromAsyncStore<T>(baseKey: string, itemCount: number): Promise<string | null>[] {
+    const readItemPromises: Promise<string | null>[] = []
+    for (let i = 0; i < itemCount; i++) {
+        readItemPromises.push(AsyncStorage.getItem(baseKey + `_${i}`));
+    }
+    return readItemPromises
+}
 
 //save one object
 async function storeValue<T>(key: string, item: T) {

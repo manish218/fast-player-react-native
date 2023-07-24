@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SplashViewNew } from './src/features/splash';
 import { CountriesListingView } from './src/features/country-listing';
 import { ChannelsListingView } from './src/features/channels-listing';
+import { StreamPlayerView } from './src/features/stream-playback';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,9 @@ function App(): JSX.Element {
         </Stack.Screen>
         <Stack.Screen name="Channels Listing">
           {(props) => <ChannelsListingView{...props} />}
+        </Stack.Screen>
+        <Stack.Screen name="Stream Player">
+          {(props) => <StreamPlayerView{...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

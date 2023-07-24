@@ -16,8 +16,8 @@ export function ChannelsListingView({ route, navigation }) {
             (channels) => {
                 setIsLoading(false)
                 console.log(channels.length)
-                console.log(channels)
-                setChannels(channels.filter(channel => channel.country === country))
+                // console.log(channels)
+                setChannels(channels.filter(channel => channel.country === country.code))
             }
         )
     }, [])
@@ -28,7 +28,7 @@ export function ChannelsListingView({ route, navigation }) {
 
     function listItemClickHandler(channel: Channel) {
         console.log(`Channel selected = ${channel.id}`)
-        // navigation.push('Channels Listing', { country })
+        navigation.push('Stream Player')
     }
 
     type ChannelItemProps = {
