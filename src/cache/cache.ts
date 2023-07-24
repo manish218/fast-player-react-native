@@ -7,18 +7,53 @@ const CHANNELS_LIST_STORE_KEY = 'CHANNELS_LIST_STORE_KEY'
 const STREAMS_LIST_STORE_KEY = 'STREAMS_LIST_STORE_KEY'
 const LAST_API_SYNC_TIME = 'LAST_API_SYNC_TIME'
 
+interface InMemCache {
+    cacheCountrisList: Country[];
+    cacheChannelsList: Channel[];
+    cacheStreamsList: Stream[];
+}
+
+const inMemCache: InMemCache = {
+    cacheCountrisList: [],
+    cacheChannelsList: [],
+    cacheStreamsList: []
+}
+
+/**
+ * TODO: 
+ * 1. Refactor to remove duplicated logic
+ * 2. Prime the cache when writing to Disk
+ */
 export class DiskCache {
     //countries related
     static cacheCountrisList = async (countries: Country[]) => { storeItems(COUNTRIES_LIST_STORE_KEY, countries) }
-    static fetchCountriesList = async () => { return readItems<Country>(COUNTRIES_LIST_STORE_KEY) }
+    static fetchCountriesList = async () => {
+        if (!inMemCache.cacheCountrisList.length) {
+            const items: Country[] = await readItems<Country>(COUNTRIES_LIST_STORE_KEY)
+            inMemCache.cacheCountrisList.push(...items)
+        }
+        return inMemCache.cacheCountrisList
+    }
 
     //channels related
     static cacheChannelsList = (channels: Channel[]) => { return storeItems(CHANNELS_LIST_STORE_KEY, channels) }
-    static fetchChannelsList = async () => { return readItems<Channel>(CHANNELS_LIST_STORE_KEY) }
+    static fetchChannelsList = async () => {
+        if (!inMemCache.cacheChannelsList.length) {
+            const items = await readItems<Channel>(CHANNELS_LIST_STORE_KEY)
+            inMemCache.cacheChannelsList.push(...items)
+        }
+        return inMemCache.cacheChannelsList
+    }
 
     //streams related
     static cacheStreamsList = async (streams: Stream[]) => { return storeItems(STREAMS_LIST_STORE_KEY, streams) }
-    static fetchStreamsList = async () => { return readItems<Stream>(STREAMS_LIST_STORE_KEY) }
+    static fetchStreamsList = async () => {
+        if (!inMemCache.cacheStreamsList.length) {
+            const items = await readItems<Stream>(STREAMS_LIST_STORE_KEY)
+            inMemCache.cacheStreamsList.push(...items)
+        }
+        return inMemCache.cacheStreamsList
+    }
 
     //streams related
     static saveLastApiSyncTime = async (timeMs: number) => { storeValue(LAST_API_SYNC_TIME, timeMs) }
@@ -29,7 +64,7 @@ export class DiskCache {
 //save list of objects
 async function storeItems<T>(key: string, items: T[]) {
     try {
-        console.log(`storeItems ${items.length}`)
+        // console.log(`storeItems ${items.length}`)
         await AsyncStorage.setItem(key + '_ITEM_COUNT', `${items.length}`);
         await Promise.all(storeItemToAsyncStore(key, items)).then()
     } catch (e) {
@@ -50,11 +85,11 @@ async function readItems<T>(key: string) {
     try {
         const itemsCountStr = await AsyncStorage.getItem(key + '_ITEM_COUNT');
         const itemCount = Number(itemsCountStr)
-        console.log(`readItems: ${itemCount}`)
+        // console.log(`readItems: ${itemCount}`)
         const items: T[] = []
         await Promise.all(fetchItemFromAsyncStore(key, itemCount)).then(it => {
             it.forEach(jsonValue => {
-                console.log(`readItems Json: ${jsonValue}`)
+                // console.log(`readItems Json: ${jsonValue}`)
                 if (jsonValue) {
                     const item = JSON.parse(jsonValue)
                     // console.log(`readItems Item: ${item}`)

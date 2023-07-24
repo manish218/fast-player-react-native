@@ -15,7 +15,7 @@ export function ChannelsListingView({ route, navigation }) {
         DiskCache.fetchChannelsList().then(
             (channels) => {
                 setIsLoading(false)
-                console.log(channels.length)
+                // console.log(channels.length)
                 // console.log(channels)
                 setChannels(channels.filter(channel => channel.country === country.code))
             }
@@ -28,7 +28,7 @@ export function ChannelsListingView({ route, navigation }) {
 
     function listItemClickHandler(channel: Channel) {
         console.log(`Channel selected = ${channel.id}`)
-        navigation.push('Stream Player')
+        navigation.push('Stream Player', { channel })
     }
 
     type ChannelItemProps = {
@@ -38,8 +38,8 @@ export function ChannelsListingView({ route, navigation }) {
     const renderChannelViewItem = (channelItemProp: ChannelItemProps) => (
         <Pressable style={{ flex: 1 }} onPress={() => listItemClickHandler(channelItemProp.item)}>
             <View style={{ ...CommonStyles.listItem, flexDirection: 'row', alignItems: 'center', alignSelf: 'stretch' }}>
-                <Image style={CommonStyles.channelLogo} source={{ uri: channelItemProp.item.logo }} />
-                <Text style={CommonStyles.listItemText}>{channelItemProp.item.name}</Text>
+                {<Image style={CommonStyles.channelLogo} source={{ uri: channelItemProp.item.logo }} />}
+                {<Text style={CommonStyles.listItemText}>{channelItemProp.item.name}</Text>}
             </View>
         </Pressable>
     );
@@ -52,7 +52,9 @@ export function ChannelsListingView({ route, navigation }) {
 
     return (<SafeAreaView style={backgroundStyle}>
         {isLoading ?
-            (<View style={CommonStyles.containerView}><ActivityIndicator size={'large'} /> </View>)
+            (<View style={CommonStyles.containerView}>
+                <ActivityIndicator size={'large'} />
+            </View>)
             :
             (<FlatList
                 data={channels}

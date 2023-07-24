@@ -13,8 +13,8 @@ export function CountriesListingView({ navigation }) {
     DiskCache.fetchCountriesList().then(
       (countries) => {
         setLoading(false)
-        console.log(`countries = ${countries.length}`)
-        countries.forEach(country => console.log(country))
+        // console.log(`countries = ${countries.length}`)
+        // countries.forEach(country => console.log(country))
         setCountries(countries)
       }
     )
@@ -22,7 +22,7 @@ export function CountriesListingView({ navigation }) {
 
   function listItemClickHandler(country: Country) {
     console.log(`Country selected = ${country.name} : ${country.code}`)
-    navigation.push('Channels Listing', { country} )
+    navigation.push('Channels Listing', { country })
   }
 
   type CountryItemProps = {
@@ -32,8 +32,8 @@ export function CountriesListingView({ navigation }) {
   const renderCountryViewItem = (countryItemProp: CountryItemProps) => (
     <Pressable onPress={() => listItemClickHandler(countryItemProp.item)}>
       <View style={{ ...CommonStyles.listItem, flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={CommonStyles.flagString}>{countryItemProp.item.flag}</Text>
-        <Text style={CommonStyles.listItemText}>{countryItemProp.item.name}</Text>
+        {<Text style={CommonStyles.flagString}>{countryItemProp.item.flag}</Text>}
+        {<Text style={CommonStyles.listItemText}>{countryItemProp.item.name}</Text>}
       </View>
     </Pressable>
   );
@@ -46,7 +46,9 @@ export function CountriesListingView({ navigation }) {
 
   return (<SafeAreaView style={backgroundStyle}>
     {isLoading ? (
-      (<View style={CommonStyles.containerView}><ActivityIndicator size={'large'} /> </View>)
+      (<View style={CommonStyles.containerView}>
+        <ActivityIndicator size={'large'} />
+      </View>)
     )
       :
       (<FlatList

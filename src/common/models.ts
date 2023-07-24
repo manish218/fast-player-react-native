@@ -9,13 +9,13 @@ export interface Country {
 export interface Channel {
     id: string,
     name: string,
-    // alt_names?: string,
-    // network?: string,
+    alt_names?: string,
+    network?: string,
     country: string,
-    // languages: string[],
-    // categories: string[], //taxonomy
+    languages: string[],
+    categories: string[], //taxonomy
     is_nsfw: false, //adult content
-    // website?: string,
+    website?: string,
     logo?: string
 }
 
