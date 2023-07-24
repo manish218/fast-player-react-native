@@ -2,9 +2,17 @@
 # fast-player-react-native
 FAST channels player that works on iOS and Android
 
+## WIP
+1. None of opensource video players support Fabric. Need to fix
+2. Add actionbar on each screen with back naviation button where needed
+3. Better styles
+4. Tablet support
+5. Prune broken streams
 
 
 
+
+# React Native auto generated docs
 
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 

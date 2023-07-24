@@ -3,6 +3,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useEffect, useRef, useState } from "react";
 import { DiskCache } from "../../cache/cache";
 import CommonStyles from "../../common/styles/common";
+import { VlCPlayerView } from "react-native-vlc-media-player";
 
 export function StreamPlayerView({ route, navigation }) {
 
@@ -17,15 +18,11 @@ export function StreamPlayerView({ route, navigation }) {
     const [streamUrl, setStreamUrl] = useState('')
 
     useEffect(() => {
-        console.log('&&&&&&&&&&&&&&&&&&&&&&& 1')
         DiskCache.fetchStreamsList().then(
             streamsList => {
-                console.log('&&&&&&&&&&&&&&&&&&&&&&& 2: ' + streamsList.length)
-                console.log('&&&&&&&&&&&&&&&&&&&&&&& 3' + channel.id)
                 const stream = streamsList.find(stream =>
                     stream.channel === channel.id
                 )
-                console.log('&&&&&&&&&&&&&&&&&&&&&&& 3' + stream?.url)
                 if (stream) {
                     console.log(`Stream URL: ${stream.url}`)
                     setStreamUrl(stream.url)
@@ -43,19 +40,13 @@ export function StreamPlayerView({ route, navigation }) {
                 <ActivityIndicator size={'large'} />
             </View>)
             :
-            (<View style={CommonStyles.containerView}>
-                <Text style={CommonStyles.listItem}>{streamUrl}</Text>
-            </View>)}
+            (<VlCPlayerView
+                autoplay={false}
+                url="https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8"
+                showTitle={true}
+                title="Big Buck Bunny"
+                onLeftPress={()=>{}}
+             />)}
     </SafeAreaView>
     )
 }
-
-var styles = StyleSheet.create({
-    backgroundVideo: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-    },
-});
