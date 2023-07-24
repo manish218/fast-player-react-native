@@ -2,15 +2,15 @@ import { ActivityIndicator, FlatList, Pressable, SafeAreaView, StyleSheet, Text,
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import CommonStyles from "../../common/styles/common";
 import React, { useEffect, useState } from "react";
-import { getCountiesList, getCountiesListLocal } from "./api";
 import { Country } from "../../common/models";
+import { DiskCache } from "../../cache/cache";
 
 export function CountriesListingView({ navigation }) {
   const [countries, setCountries] = useState<Country[]>([])
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCountiesList().then(
+    DiskCache.fetchCountriesList().then(
       (countries) => {
         setLoading(false)
         setCountries(countries)

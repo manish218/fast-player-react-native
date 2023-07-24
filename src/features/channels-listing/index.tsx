@@ -2,8 +2,8 @@ import { ActivityIndicator, FlatList, Image, Pressable, SafeAreaView, StyleSheet
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import CommonStyles from "../../common/styles/common";
 import { useEffect, useState } from "react";
-import { fetchChannels } from "./api";
 import { Channel, Country } from "../../common/models";
+import { DiskCache } from "../../cache/cache";
 
 
 export function ChannelsListingView({ route, navigation }) {
@@ -12,12 +12,12 @@ export function ChannelsListingView({ route, navigation }) {
     const [channels, setChannels] = useState<Channel[]>([])
 
     useEffect(() => {
-        fetchChannels(country).then(
+        DiskCache.fetchChannelsList().then(
             (channels) => {
-                console.log('****** >>>> *******')
-                console.log(channels.length)
                 setIsLoading(false)
-                setChannels(channels)
+                console.log(channels.length)
+                console.log(channels)
+                setChannels(channels.filter(channel => channel.country === country))
             }
         )
     }, [])

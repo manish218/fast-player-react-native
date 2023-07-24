@@ -2,12 +2,15 @@ import { Image, Pressable, SafeAreaView, StyleSheet, Text, View, useColorScheme 
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import CommonStyles from "../../common/styles/common";
 import { useEffect } from "react";
+import { fetchAndStoreValidSteamsChannelsAndCountries } from "./api";
 
 
 export function SplashViewNew({ navigation }) {
 
   useEffect(() => {
-    setTimeout(() => navigation.replace('Countries Listing'), 2000)
+    fetchAndStoreValidSteamsChannelsAndCountries().then(result => {
+      navigation.push('Countries Listing')
+    })
   }, [])
 
 
