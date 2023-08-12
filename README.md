@@ -4,7 +4,7 @@ FAST channels player that works on iOS and Android
 
 ## WIP
 1. None of opensource video players support Fabric. Need to fix
-2. Add actionbar on each screen with back naviation button where needed
+2. Actionbar with back navigation
 3. Better styles
 4. Tablet support
 5. Prune broken streams
